@@ -6,6 +6,20 @@ authors = ["3w36zj6"]
 license = "MIT"
 description = "A mathematical brackets colorizer."
 repository = "https://github.com/3w36zj6/typst-prismath"
-keywords = []
+keywords = [
+  "math",
+  "mathematical",
+  "mathematics",
+  "equation",
+  "brackets",
+  "bracket",
+  "color",
+  "colorizer",
+  "colorize",
+  "colorization",
+  "highlight",
+  "highlighter",
+  "highlighting",
+]
 categories = []
 compiler = "0.12.0"
