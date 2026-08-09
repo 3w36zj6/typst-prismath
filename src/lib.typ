@@ -88,7 +88,7 @@
         ..if elem.has("delim") { (delim: elem.delim) },
         ..if elem.has("gap") { (gap: elem.gap) },
       )
-    } else if elem.func() == text and (elem.text == "(" or elem.text == ")") {
+    } else if elem.has("text") and (elem.text == "(" or elem.text == ")") {
       return text(
         fill: bracket-colors.at(calc.rem(depth, bracket-colors.len())),
         elem,
