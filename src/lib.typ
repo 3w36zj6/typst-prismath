@@ -1,68 +1,99 @@
 #let colorize-equation(equation, bracket-colors: (red, green, blue)) = {
+  let sequence-func = ($ a + b $).body.func()
   let process-math(elem, depth, process-sequence) = {
     if elem.func() == math.accent {
-      return math.accent(
-        process-sequence(elem.base, depth + 1),
-        elem.accent,
-        ..if elem.has("size") { (size: elem.size) },
+      let base = process-sequence(elem.base, depth).body
+      (
+        body: math.accent(
+          base,
+          elem.accent,
+          ..if elem.has("size") { (size: elem.size) },
+        ),
+        depth: depth,
       )
     } else if elem.func() == math.attach {
-      return math.attach(
-        process-sequence(elem.base, depth + 1),
-        ..if elem.has("b") { (b: process-sequence(elem.b, depth + 1)) },
-        ..if elem.has("bl") { (bl: process-sequence(elem.bl, depth + 1)) },
-        ..if elem.has("br") { (br: process-sequence(elem.br, depth + 1)) },
-        ..if elem.has("t") { (t: process-sequence(elem.t, depth + 1)) },
-        ..if elem.has("tl") { (tl: process-sequence(elem.tl, depth + 1)) },
-        ..if elem.has("tr") { (tr: process-sequence(elem.tr, depth + 1)) },
+      (
+        body: math.attach(
+          process-sequence(elem.base, depth).body,
+          ..if elem.has("b") { (b: process-sequence(elem.b, depth).body) },
+          ..if elem.has("bl") { (bl: process-sequence(elem.bl, depth).body) },
+          ..if elem.has("br") { (br: process-sequence(elem.br, depth).body) },
+          ..if elem.has("t") { (t: process-sequence(elem.t, depth).body) },
+          ..if elem.has("tl") { (tl: process-sequence(elem.tl, depth).body) },
+          ..if elem.has("tr") { (tr: process-sequence(elem.tr, depth).body) },
+        ),
+        depth: depth,
       )
     } else if elem.func() == math.binom {
-      return math.binom(
-        process-sequence(elem.upper, depth + 1),
-        ..elem.lower.map(k => process-sequence(k, depth + 1)),
+      (
+        body: math.binom(
+          process-sequence(elem.upper, depth).body,
+          ..elem.lower.map(k => process-sequence(k, depth).body),
+        ),
+        depth: depth,
       )
     } else if elem.func() == math.cancel {
-      return math.cancel(
-        process-sequence(elem.body, depth + 1),
-        ..if elem.has("angle") { (angle: elem.angle) },
-        ..if elem.has("cross") { (cross: elem.cross) },
-        ..if elem.has("inverted") { (inverted: elem.inverted) },
-        ..if elem.has("length") { (length: elem.length) },
-        ..if elem.has("stroke") { (stroke: elem.stroke) },
+      (
+        body: math.cancel(
+          process-sequence(elem.body, depth).body,
+          ..if elem.has("angle") { (angle: elem.angle) },
+          ..if elem.has("cross") { (cross: elem.cross) },
+          ..if elem.has("inverted") { (inverted: elem.inverted) },
+          ..if elem.has("length") { (length: elem.length) },
+          ..if elem.has("stroke") { (stroke: elem.stroke) },
+        ),
+        depth: depth,
       )
     } else if elem.func() == math.cases {
-      return math.cases(
-        ..elem.children.map(k => process-sequence(k, depth + 1)),
-        ..if elem.has("delim") { (delim: elem.delim) },
-        ..if elem.has("gap") { (gap: elem.gap) },
-        ..if elem.has("reverse") { (reverse: elem.reverse) },
+      (
+        body: math.cases(
+          ..elem.children.map(k => process-sequence(k, depth).body),
+          ..if elem.has("delim") { (delim: elem.delim) },
+          ..if elem.has("gap") { (gap: elem.gap) },
+          ..if elem.has("reverse") { (reverse: elem.reverse) },
+        ),
+        depth: depth,
       )
     } else if elem.func() == math.frac {
-      return math.frac(
-        process-sequence(elem.num, depth + 1),
-        process-sequence(elem.denom, depth + 1),
+      (
+        body: math.frac(
+          process-sequence(elem.num, depth).body,
+          process-sequence(elem.denom, depth).body,
+        ),
+        depth: depth,
       )
     } else if elem.func() == math.lr {
-      return math.lr(
-        process-sequence(elem.body, depth + 1),
-        ..if elem.has("size") { (size: elem.size) },
+      let result = process-sequence(elem.body, depth)
+      (
+        body: math.lr(
+          result.body,
+          ..if elem.has("size") { (size: elem.size) },
+        ),
+        depth: result.depth,
       )
     } else if elem.func() == math.mat {
-      return math.mat(
-        ..elem.rows.map(row => row.map(k => process-sequence(k, depth + 1))),
-        ..if elem.has("delim") { (delim: elem.delim) },
-        ..if elem.has("align") { (align: elem.align) },
-        ..if elem.has("augment") { (augment: elem.augment) },
-        ..if elem.has("gap") { (gap: elem.gap) },
-        ..if elem.has("row-gap") { (row-gap: elem["row-gap"]) },
-        ..if elem.has("column-gap") { (column-gap: elem["column-gap"]) },
+      (
+        body: math.mat(
+          ..elem.rows.map(row => row.map(k => process-sequence(k, depth).body)),
+          ..if elem.has("delim") { (delim: elem.delim) },
+          ..if elem.has("align") { (align: elem.align) },
+          ..if elem.has("augment") { (augment: elem.augment) },
+          ..if elem.has("row-gap") { (row-gap: elem.at("row-gap")) },
+          ..if elem.has("column-gap") {
+            (column-gap: elem.at("column-gap"))
+          },
+        ),
+        depth: depth,
       )
     } else if elem.func() == math.root {
-      return math.root(
-        if elem.has("index") {
-          (process-sequence(elem.index, depth + 1))
-        } else { none },
-        process-sequence(elem.radicand, depth + 1),
+      (
+        body: math.root(
+          if elem.has("index") {
+            (process-sequence(elem.index, depth).body)
+          } else { none },
+          process-sequence(elem.radicand, depth).body,
+        ),
+        depth: depth,
       )
     } else if (
       elem.func()
@@ -77,39 +108,66 @@
           math.overshell,
         )
     ) {
-      return elem.func()(
-        process-sequence(elem.body, depth + 1),
-        if elem.has("annotation") { (elem.annotation) } else { none },
+      let annotation = if elem.has("annotation") {
+        process-sequence(elem.annotation, depth).body
+      } else {
+        none
+      }
+      (
+        body: elem.func()(
+          process-sequence(elem.body, depth).body,
+          annotation,
+        ),
+        depth: depth,
       )
     } else if elem.func() == math.vec {
-      return math.vec(
-        ..elem.children.map(k => process-sequence(k, depth + 1)),
-        ..if elem.has("align") { (align: elem.align) },
-        ..if elem.has("delim") { (delim: elem.delim) },
-        ..if elem.has("gap") { (gap: elem.gap) },
+      (
+        body: math.vec(
+          ..elem.children.map(k => process-sequence(k, depth).body),
+          ..if elem.has("align") { (align: elem.align) },
+          ..if elem.has("delim") { (delim: elem.delim) },
+          ..if elem.has("gap") { (gap: elem.gap) },
+        ),
+        depth: depth,
       )
-    } else if elem.has("text") and (elem.text == "(" or elem.text == ")") {
-      return text(
-        fill: bracket-colors.at(calc.rem(depth, bracket-colors.len())),
-        elem,
+    } else if elem.has("text") and elem.text == "(" {
+      (
+        body: text(
+          fill: bracket-colors.at(calc.rem(depth, bracket-colors.len())),
+          elem,
+        ),
+        depth: depth + 1,
+      )
+    } else if elem.has("text") and elem.text == ")" {
+      let closing-depth = calc.max(depth - 1, 0)
+      (
+        body: text(
+          fill: bracket-colors.at(
+            calc.rem(closing-depth, bracket-colors.len()),
+          ),
+          elem,
+        ),
+        depth: closing-depth,
       )
     } else {
-      return elem
+      (body: elem, depth: depth)
     }
   }
   let process-sequence(sequence, depth) = {
-    if sequence.has("children") {
-      let processed = sequence.children.map(elem => process-math(
-        elem,
-        depth + 1,
-        process-sequence,
-      ))
-      return processed.join()
+    if sequence.func() == sequence-func {
+      let current-depth = depth
+      let processed = ()
+      for elem in sequence.children {
+        let result = process-math(elem, current-depth, process-sequence)
+        processed.push(result.body)
+        current-depth = result.depth
+      }
+      (body: processed.join(), depth: current-depth)
     } else {
-      return process-math(sequence, depth, process-sequence)
+      process-math(sequence, depth, process-sequence)
     }
   }
-  let processed-body = process-sequence(equation.body, 0)
+  let processed-body = process-sequence(equation.body, 0).body
   let processed-equation = math.equation(
     processed-body,
     block: equation.block,
@@ -117,5 +175,5 @@
     ..if equation.has("numbering") { (numbering: equation.numbering) },
     ..if equation.has("supplement") { (supplement: equation.supplement) },
   )
-  return processed-equation
+  processed-equation
 }
