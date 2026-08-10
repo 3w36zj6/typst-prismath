@@ -5,7 +5,7 @@ A mathematical brackets colorizer for Typst.
 ## Usage
 
 ```typst
-#import "@preview/prismath:0.1.0": *
+#import "@preview/prismath:0.2.0": *
 
 #colorize-equation($ A + (B + (C + (D + E))) + F $)
 
