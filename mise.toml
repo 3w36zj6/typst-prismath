@@ -5,4 +5,4 @@ tinymist = "0.15.2"
 
 [tasks.test]
 description = "Run the Tinymist test suite"
-run = "tinymist test tests/main.typ --root . --no-dashboard --coverage --print-coverage=full"
+run = "tinymist test tests/main.typ --root . --no-dashboard --ignore-system-fonts --coverage --print-coverage=full"

@@ -1,4 +1,5 @@
 #import "../src/lib.typ": colorize-equation
+#import "example-brackets.typ"
 
 #let colors = (red, green, blue, orange)
 #let delimiters = ($ (x) $).body.body.children
