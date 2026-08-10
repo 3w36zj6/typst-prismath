@@ -16,5 +16,5 @@ A mathematical brackets colorizer for Typst.
 ```
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/60af8c71-9bf1-4ad0-a201-22a0640881cb" width="540" height="150" alt="sample"/>
+  <img src="https://raw.githubusercontent.com/3w36zj6/typst-prismath/refs/tags/v0.2.0/examples/color-palettes.svg" width="540" height="150" alt="sample"/>
 </div>
