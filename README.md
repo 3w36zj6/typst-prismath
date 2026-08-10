@@ -16,5 +16,5 @@ A mathematical brackets colorizer for Typst.
 ```
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/3w36zj6/typst-prismath/refs/tags/v0.2.0/examples/color-palettes.svg" width="540" height="150" alt="sample"/>
+  <img src="https://raw.githubusercontent.com/3w36zj6/typst-prismath/refs/tags/v0.2.0/examples/color-palettes.svg" width="540" height="150" alt="Nested parentheses colored by depth using the default and custom palettes"/>
 </div>
